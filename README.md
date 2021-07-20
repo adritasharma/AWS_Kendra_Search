@@ -1,27 +1,88 @@
-# AWSKendraSearch
+# AWS Kendra Search
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.2.
+Amazon Kendra is an intelligent search service powered by machine learning.
 
-## Development server
+Kendra indexes enterprise documents, websites and applications so that end users can more easily find the information they need within the vast amount of content spread across the company.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- A data source is a location, such as an Amazon Simple Storage Service (Amazon S3) bucket, where you store the documents for indexing. 
+- Connectors are used to synchronize data from multiple content repositories. Connectors can be scheduled to automatically sync your index with your data source .Connectors can be of type S3, Salesforce, ServiceNow, RDS, Sharepoint, and, OneDrive etc
 
-## Code scaffolding
+### AWS Console Steps
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- Go to Services -> Kendra
+- Create an **Index**, fill the Index name, IAM Role and Role Name, select Developer Edition as Provisioning
+- Select the index and add **Data Source**. 
+- Add **Connector** (eg: S3) to the Data Source.
+- Choose Run on demand in Set sync run schedule section.
+- Review the configuration details and then choose Create.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+### Query the index
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+We can use the text search console to query the newly created index. In the left navigation pane of the Amazon Kendra console, choose Search console. In the search box, type the query.
 
-## Running end-to-end tests
+## Angular UI for the search functionality
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+**Initialisation**
 
-## Further help
+Install AWS-SDK that gives type definitions for node.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+    npm install aws-sdk
+    
+    
+ Global needs to be defined in the polyfill.ts file
+    
+    (window as any).global = window;
+
+
+**Adding Credentials**
+
+Add IAM **accessKeyId** and **secretAccessKey** in environment.ts
+
+    export const environment = {
+      accessKeyId: "XXXXXXXXXXXXXXXXXXXXXX",
+      secretAccessKey: "YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY",
+      region: "us-xxxx-1",
+      kendraIndex:"cbxxx26f-xxxx-yyyy-xxxx-6c9xxxa0e643"
+    };
+
+**Generate the Component**
+
+    
+    import { Kendra } from 'aws-sdk';
+
+    searchKendra() {
+
+        var kendra = require("aws-sdk/clients/kendra");
+
+        var kendraClient = new Kendra({
+            accessKeyId: environment.accessKeyId,
+            secretAccessKey: environment.secretAccessKey,
+            region: environment.region
+        })
+
+
+        var params = {
+            IndexId: environment.kendraIndex,
+            QueryText: this.userInput,
+            // QueryResultTypeFilter: "DOCUMENT",
+            PageNumber: 1
+        };
+
+        kendraClient.query(params, function (err, data) {
+
+            if (err) {
+                console.log(err, err.stack);
+            }
+            else {
+                console.log("Kendra result is", data.ResultItems);
+            }
+
+        });
+
+    }
+
+
+
+
