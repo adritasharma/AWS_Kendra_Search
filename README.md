@@ -4,8 +4,8 @@ Amazon Kendra is an intelligent search service powered by machine learning.
 
 Kendra indexes enterprise documents, websites and applications so that end users can more easily find the information they need within the vast amount of content spread across the company.
 
-- A data source is a location, such as an Amazon Simple Storage Service (Amazon S3) bucket, where you store the documents for indexing. 
-- Connectors are used to synchronize data from multiple content repositories. Connectors can be scheduled to automatically sync your index with your data source .Connectors can be of type S3, Salesforce, ServiceNow, RDS, Sharepoint, and, OneDrive etc
+- A **Data Source** is a location, such as an Amazon Simple Storage Service (Amazon S3) bucket, where you store the documents for indexing. 
+- **Connectors** are used to synchronize data from multiple content repositories. Connectors can be scheduled to automatically sync your index with your data source .Connectors can be of type S3, Salesforce, ServiceNow, RDS, Sharepoint, and, OneDrive etc
 
 ### AWS Console Steps
 
